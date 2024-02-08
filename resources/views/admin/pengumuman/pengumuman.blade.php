@@ -34,6 +34,7 @@
     </style>
 
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- main content -->
     <div class="container-fluid c-black position-relative">
@@ -86,7 +87,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->judul_pengumuman }}</td>
                                 <td>{{ $data->tanggal_pengumuman }}</td>
-                                <td>{{ $data->keterangan }}</td>
+                                <td>{!! $data->keterangan !!}</td>
                                 <td>
                                     <div class="button-container">
                                         <div class="btn-container">
@@ -96,8 +97,6 @@
                                         </div>
                                     </div>
                                 </td>
-
-
                             </tr>
 
                             @endforeach
@@ -183,7 +182,7 @@
 
                 $("#judulPengumuman").text('"' + judulPengumuman + '"');
             });
-
+in
             $("#deleteButton").on("click", function() {
                 $.ajax({
                     url: deleteUrl,

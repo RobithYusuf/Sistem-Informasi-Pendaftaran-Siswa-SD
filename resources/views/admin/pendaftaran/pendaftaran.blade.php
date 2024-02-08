@@ -4,7 +4,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 130px;
+            max-width: 180px;
         }
 
         #dataTable td.pengecekan {
@@ -196,7 +196,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus data <span id="siswaNama"></span>?
+                    Apakah Anda yakin ingin menghapus data <span id="siswaNama"></span>? Termasuk data yang terkait
                 </div>
 
                 <div class="modal-footer">
@@ -499,9 +499,11 @@
                         // Tampilkan notifikasi setelah reload
                         localStorage.setItem("notification", response.success);
                     },
-                    error: function() {
-                        alert("Terjadi kesalahan. Silakan coba lagi.");
+                    error: function(xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("Terjadi kesalahan: " + xhr.responseText);
                     }
+
                 });
 
                 $("#deleteModal").modal("hide");

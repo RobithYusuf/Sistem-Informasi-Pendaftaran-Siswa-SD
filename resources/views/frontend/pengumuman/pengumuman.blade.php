@@ -41,8 +41,6 @@
 </style>
 <section id="pengumuman" class="blog">
     <div class="container" data-aos="fade-up">
-
-
         <div class="row">
             <div class="col-lg-12 entries">
                 @if($pengumuman->count() > 0)
@@ -150,14 +148,5 @@
     checkDateAndShowAnnouncement(targetDate, '{{ $item->id }}');
     @endforeach
 
-    // document.getElementById("download-button").addEventListener("click", function() {
-    //     fetch("/get-pengumuman")
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             var tanggalPengumuman = new Date(data.tanggal_pengumuman);
-    //             // sisanya sama seperti kode Anda sebelumnya
-    //         });
-
-    // });
 </script>
 @endsection

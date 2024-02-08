@@ -51,7 +51,7 @@
 
      <!-- Heading -->
      <div class="sidebar-heading">
-         Master Data
+         Main Menu
      </div>
 
      <li class="nav-item  {{ Request::is('admin/pendaftaran*') ? 'active' : '' }}">
@@ -79,11 +79,11 @@
      <hr class="mt-3 sidebar-divider">
 
      <!-- Heading -->
-     <div class="sidebar-heading mt-2">
+     <div class="sidebar-heading mt-2 mb-2">
          Laporan
      </div>
-     <li class="nav-item {{ Request::is('/admin/laporanpendaftaran') ? 'active' : '' }}">
-         <a class="nav-link px-3 py-2 mb-3" href="/admin/laporanpendaftaran">
+     <li class="nav-item {{ Request::is('admin/laporanpendaftaran*') ? 'active' : '' }}">
+         <a class="nav-link px-3 py-2 mb-2" href="/admin/laporanpendaftaran">
              <i class="fas fa-info-circle"></i>
              <span>Laporan Pendaftaran</span>
          </a>

@@ -23,6 +23,21 @@
                 <h6 class="m-0 font-weight-bold text-primary">Formulir Data Pengumuman</h6>
             </div>
             <div class="card-body">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
                 <form action="{{ route('pengumuman.update', ['pengumuman' => $pengumuman->id])}}" method="POST">
                     @method('PUT')
                     @csrf
@@ -42,9 +57,9 @@
                     </div>
                     <div class="form-group mt-3">
                         <label for="keterangan" class="form-label">Detail Isi Pengumuman</label>
-                        <textarea class="form-control" name="keterangan" rows="10" id="keterangan">{{ old('keterangan', $pengumuman->keterangan) }}</textarea>
-
+                        <textarea class="form-control" name="keterangan" rows="25" id="keterangan">{{ old('keterangan', $pengumuman->keterangan ?? '') }}</textarea>
                     </div>
+
 
                     <a href="{{route('pengumuman.index.admin')}}" class="btn btn-secondary custom-btn">Kembali</a>
                     <button type="submit" class="btn btn-primary custom-btn">Save</button>
@@ -54,7 +69,16 @@
 
         </div>
     </div>
+    <script src="https://cdn.ckeditor.com/4.16.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('keterangan', {
 
+            width: '100%', // Lebar CKEditor
+            height: 450, // Tinggi CKEditor dalam piksel
+
+
+        });
+    </script>
     @push('script')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>

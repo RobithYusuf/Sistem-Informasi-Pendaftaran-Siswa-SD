@@ -124,7 +124,6 @@
         }
     </style>
 
-
     <!-- main content -->
     <div class="container-fluid c-black position-relative">
 
@@ -176,7 +175,7 @@
                                 <td class="text-center">
                                     <a href="{{ asset('storage/berkas/' . basename($data->kartu_keluarga)) }}" target="_blank" class="thumbnail-link">
                                         @if(pathinfo($data->kartu_keluarga, PATHINFO_EXTENSION) == 'pdf')
-                                        <img src="{{ asset('pdf.png') }}" alt="Kartu Keluarga" class="img-thumbnail">
+                                        <img src="{{ asset('assets/img/pdf.png') }}" alt="Kartu Keluarga" class="img-thumbnail">
                                         @else
                                         <img src="{{asset('storage/'. $data->kartu_keluarga) }}" alt="Kartu Keluarga" class="img-thumbnail">
                                         @endif
@@ -185,7 +184,7 @@
                                 <td class="text-center">
                                     <a href="{{ asset('storage/berkas/' . basename($data->akta_kelahiran)) }}" target="_blank" class="thumbnail-link">
                                         @if(pathinfo($data->akta_kelahiran, PATHINFO_EXTENSION) == 'pdf')
-                                        <img src="{{ asset('pdf.png') }}" alt="Kartu Keluarga" class="img-thumbnail">
+                                        <img src="{{ asset('assets/img/pdf.png') }}" alt="Kartu Keluarga" class="img-thumbnail">
                                         @else
                                         <img src="{{asset('storage/'. $data->akta_kelahiran) }}" alt="Kartu Keluarga" class="img-thumbnail">
                                         @endif
@@ -316,8 +315,6 @@
                                 statusMessage = 'Status tidak diketahui';
                                 break;
                         }
-
-
                         var message = "Status Daftar Ulang berhasil diubah menjadi " + statusMessage;
 
                         // Simpan pesan ke dalam sessionStorage
@@ -335,7 +332,5 @@
             });
         });
     </script>
-
-
 
 </x-app-layout>

@@ -20,55 +20,65 @@ class InformasiController extends Controller
         return view('frontend.index', compact('informasi'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'kegiatan' => 'required',
+            'jenis' => 'required',
+            'deskripsi' => 'nullable',
+            'tanggal_mulai' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date',
+        ]);
+
+        $informasi = new Informasi;
+        $informasi->kegiatan = $request->input('kegiatan');
+        $informasi->jenis = $request->input('jenis');
+        $informasi->deskripsi = $request->input('deskripsi');
+        $informasi->tanggal_mulai = $request->input('tanggal_mulai');
+        $informasi->tanggal_selesai = $request->input('tanggal_selesai');
+        $informasi->save();
+
+        return redirect()->route('informasi.index.admin')->with('success', 'Informasi kegiatan berhasil disimpan');
+    }
+
     public function edit($id)
     {
         // Mencari informasi berdasarkan ID
-        $data = Informasi::find($id);
-        if (!$data) {
-            return redirect()->route('informasi.index.admin')->with('error', 'ID Jadwal tidak ditemukan');
-        }
-        $jenis = $data->jenis;
-        return view('admin.informasi-jadwal.edit', compact('data', 'jenis'));
+        $data = Informasi::findorfail($id);
+
+        return view('admin.informasi-jadwal.edit', compact('data'));
     }
+
 
 
     public function update(Request $request, $id)
     {
-
-        // Mencari informasi berdasarkan ID
-        $informasi = Informasi::find($id);
-
-        // Jika informasi tidak ditemukan, redirect ke halaman yang sesuai dengan pesan error
-        if (!$informasi) {
-            return redirect()->route('informasi.edit')->with('error', 'Informasi tidak ditemukan');
-        }
-
-        // Validasi input dari form
+        $informasi = Informasi::findOrFail($id);
+       
         $validatedData = $request->validate([
-            'judul_informasi' => 'required|string|max:55',
-            'detail' => 'required',
-            'tanggal' => 'nullable|date',
+            'kegiatan' => 'required|string|max:55',
+            'deskripsi' => 'nullable',
+            'jenis' => 'required',
             'tanggal_mulai' => 'nullable|date',
-            'tanggal_selesai' => 'nullable|date',
-            'tanggal_pengumuman' => 'nullable|date',
-            'tanggal_daftar_ulang' => 'nullable|date',
+            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
         ]);
 
-        $informasi->update($validatedData);
-
-
-        // Update kolom dalam database dengan data dari form
-        $informasi->judul_informasi = $request->judul_informasi;
-        $informasi->detail = $request->detail;
-        $informasi->tanggal = $request->tanggal;
-        $informasi->tanggal_mulai = $request->tanggal_mulai;
-        $informasi->tanggal_selesai = $request->tanggal_selesai;
-        $informasi->tanggal_pengumuman = $request->tanggal_pengumuman;
-        $informasi->tanggal_daftar_ulang = $request->tanggal_daftar_ulang;
+        $informasi->fill($validatedData);
         $informasi->save();
 
-
-        // Redirect ke halaman yang sesuai dengan pesan sukses
         return redirect()->route('informasi.index.admin')->with('success', 'Informasi berhasil diperbarui');
+    }
+
+    public function create()
+    {
+        return view('admin.informasi-jadwal.tambah');
+    }
+
+    public function hapus($id)
+    {
+        $pengumuman = Informasi::find($id);
+        $pengumuman->delete();
+
+        return response()->json(['success' => 'Pengumuman berhasil dihapus']);
     }
 }

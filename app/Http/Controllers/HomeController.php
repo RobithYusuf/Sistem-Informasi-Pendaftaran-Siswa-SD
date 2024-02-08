@@ -20,11 +20,23 @@ class HomeController extends Controller
         $berkasmenunggu = Berkas::where('status_daftar_ulang', 'menunggu')->count();
 
         // jadwal
-        $informasiPendaftaran = Informasi::find(1);
-        $informasiPengumuman = Informasi::find(2);
-        $informasiDaftarUlang = Informasi::find(3);
-        $informasiTanggalMasuk = Informasi::find(4);
+        $informasiPendaftaran = Informasi::where('jenis', 'pendaftaran')->first();
+        $informasiPengumuman = Informasi::where('jenis', 'pengumuman')->first();
+        $informasiDaftarUlang = Informasi::where('jenis', 'daftarulang')->first();
+        $informasiSiswaMasuk = Informasi::where('jenis', 'siswamasuk')->first();
 
-        return view('admin.dashboard.dashboard', compact('totalPendaftar', 'diterima', 'menunggu', 'ditolak', 'totalDaftarUlang', 'accberkas', 'berkasmenunggu', 'informasiPendaftaran', 'informasiPengumuman', 'informasiDaftarUlang', 'informasiTanggalMasuk'));
+        return view('admin.dashboard.dashboard', compact(
+            'totalPendaftar',
+            'diterima',
+            'menunggu',
+            'ditolak',
+            'totalDaftarUlang',
+            'accberkas',
+            'berkasmenunggu',
+            'informasiPendaftaran',
+            'informasiPengumuman',
+            'informasiDaftarUlang',
+            'informasiSiswaMasuk'
+        ));
     }
 }

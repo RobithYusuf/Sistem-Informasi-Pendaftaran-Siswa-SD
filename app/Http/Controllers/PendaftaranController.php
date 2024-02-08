@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 
@@ -76,8 +77,17 @@ class PendaftaranController extends Controller
                 'pekerjaan_wali.max' => 'Pekerjaan wali tidak boleh lebih dari 55 karakter',
             ]
         );
-        Pendaftaran::create($request->all());
+
+        $tanggal_lahir = Carbon::createFromFormat('d-m-Y', $request->input('tanggal_lahir'))->format('Y-m-d');
+        Pendaftaran::create(array_merge($request->all(), ['tanggal_lahir' => $tanggal_lahir]));
         return redirect()->route('pendaftaran.submit')->with('success', 'Pendaftaran berhasil disimpan!');
+    }
+
+    public function cekNIK(Request $request)
+    {
+        $nik = $request->input('nik');
+        $exists = Pendaftaran::where('nik', $nik)->exists();
+        return response()->json(['exists' => $exists]);
     }
 
     //guest landing page
@@ -159,8 +169,20 @@ class PendaftaranController extends Controller
     public function hapus($id)
     {
         $pendaftaran = Pendaftaran::find($id);
+
+        if (!$pendaftaran) {
+            return response()->json(['error' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+
+        // Hapus Berkas terkait, jika ada
+        if ($pendaftaran->berkas) {
+            $pendaftaran->berkas->delete();
+        }
+
+
+        // Hapus pendaftaran
         $pendaftaran->delete();
 
-        return response()->json(['success' => 'Pendaftaran berhasil dihapus']);
+        return response()->json(['success' => 'Pendaftaran dan semua data terkait berhasil dihapus']);
     }
 }

@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BerkasController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InformasiController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\PengumumanController;
+use App\Http\Controllers\PendaftaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::get('/', [InformasiController::class, 'landingPageIndex'])->name('landing
 //halaman untuk admin
 Route::middleware(['auth'])->group(function () {
     //dashboard
+    Route::get('/admiin/profile', [UserController::class, 'showProfileForm'])->name('profile.form')->middleware('auth');
+    Route::put('/admin/profile', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
+
     Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 
     // Route::post('/admin/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store')->middleware('auth');
@@ -56,8 +60,12 @@ Route::middleware(['auth'])->group(function () {
 
     //Admin Jadwal
     Route::get('/admin/informasi', [InformasiController::class, 'index'])->name('informasi.index.admin')->middleware('auth');
-    Route::get('/admin/informasi/{id}', [InformasiController::class, 'edit'])->name('informasi.edit')->middleware('auth');
-    Route::put('/admin/informasi/{id}', [InformasiController::class, 'update'])->name('informasi.update')->middleware('auth');
+    Route::get('/admin/informasi/tambah', [InformasiController::class, 'create'])->name('informasi.create')->middleware('auth');
+    Route::post('/admin/informasi/simpan', [InformasiController::class, 'store'])->name('informasi.store')->middleware('auth');
+    Route::get('/admin/informasi/{id}/edit', [InformasiController::class, 'edit'])->name('informasi.edit')->middleware('auth');
+    Route::put('/admin/informasi/{id}/update', [InformasiController::class, 'update'])->name('informasi.update')->middleware('auth');
+
+    Route::delete('/admin/informasi/{id}/hapus', [InformasiController::class, 'hapus'])->name('informasi.hapus')->middleware('auth');
 
     //Admin Daftar ulang
     Route::get('/admin/daftarulang', [BerkasController::class, 'index'])->name('daftarulang.index')->middleware('auth');
@@ -68,14 +76,14 @@ Route::middleware(['auth'])->group(function () {
     //laporan
     Route::get('/admin/laporanpendaftaran', [LaporanController::class, 'index'])->name('laporanpendaftaran.index')->middleware('auth');
     Route::get('/admin/laporanpendaftaran/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak')->middleware('auth');
-
 });
 
 //pendaftaran siswa (frontend)
+Route::get('/cek-nik', [PendaftaranController::class, 'cekNIK'])->name('cekNIK');
 Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.submit');
 Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 Route::get('/hasil-pendaftaran', [PendaftaranController::class, 'hasil'])->name('pendaftaran.hasil');
-//pencarian datasiswa hasil pendaftaram
+//pencarian datasiswa hasil pendaftaran
 Route::get('/pendaftaran/hasil/{nik}', [PendaftaranController::class, 'hasilNik'])->name('pendaftaran.hasil.nik');
 
 //pengumuman landingpage

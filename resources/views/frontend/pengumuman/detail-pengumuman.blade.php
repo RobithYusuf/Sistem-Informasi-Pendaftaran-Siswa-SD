@@ -20,14 +20,14 @@
         padding: 5px 0 !important;
     }
 
-    p.pembukaan{
+    p.pembukaan {
         margin-top: 2rem !important;
         margin-bottom: 1px !important;
     }
 
     .pengumuman-detail h1,
     .pengumuman-detail h5 {
-        color: #333!important;
+        color: #333 !important;
         font-family: Arial, sans-serif !important;
     }
 
@@ -93,7 +93,8 @@
     .footer-style {
         margin-top: 2rem !important;
     }
-    p.penutup{
+
+    p.penutup {
 
         margin-top: 1px !important;
     }
@@ -105,7 +106,7 @@
             <table style="width: 100%; border: none;">
                 <tr>
                     <td style="width: 15%; text-align: left;">
-                        <img src="../logo.png" alt="Logo Sekolah" style="width:100px; height:100px;">
+                        <img src="{{asset('assets/img/logo.png')}}" alt="Logo Sekolah" style="width:115px; height:115px;">
                     </td>
                     <td style="width: 70%; text-align: center; margin-top:5px">
                         <div class="title">
@@ -115,27 +116,19 @@
                         </div>
                     </td>
                     <td style="width: 15%; text-align: right;">
-                        <img src="../bantul.png" alt="LogoBantul" style="width:100px; height:100px;">
+                        <img src="{{asset('assets/img/bantul.png')}}" alt="LogoBantul" style="width:100px; height:120px;">
                     </td>
                 </tr>
             </table>
             <hr style="border-top: 5px solid #000000;">
         </div>
         <div class="kop-surat text-center">
-            <h1>{{ $pengumuman->judul_pengumuman }}</h1>
+            <h1>{{ $pengumuman->judul_pengumuman  }}</h1>
         </div>
         <div class="pengumuman-content">
-            <p class="pembukaan">Selamat kepada seluruh siswa yang telah lolos menjadi siswa sekolah dasar negeri 1 Kretek.</p>
             <section class="detail-pengumuman" style="text-align: justify;">
-                <p>{{ $pengumuman->keterangan }}</p>
-                <p><strong>Infromasi jadwal daftar ulang untuk pengumpulan berkas :</strong> {{ \Carbon\Carbon::parse($informasiDaftarUlang->tanggal_daftar_ulang)->format('d-m-Y') }}</p>
-                <p><strong>Informasi lainya :</strong> {{ $informasiSiswaMasuk->judul_informasi }} Pada Tanggal {{ \Carbon\Carbon::parse($informasiSiswaMasuk->tanggal)->format('d-m-Y') }}</p>
+                {!! $pengumumanContent !!}
             </section>
-            <footer>
-                <p class="penutup" style="text-align: justify;">Terima kasih kepada semua pihak yang telah mendukung proses ini. Kami berharap kepada seluruh siswa yang lolos untuk terus mengembangkan potensi dan berkontribusi dalam sekolah kami. Selamat bergabung di Sekolah Dasar Negeri 1 Kretek.</p>
-                <p style="text-align: right;">Tertanda,</p>
-                <p class="footer-style" style="text-align: right; ">Panitia PPDB</p>
-            </footer>
         </div>
 
 

@@ -164,7 +164,7 @@
                 </a>
             </div>
             <div class="col-xl-3 col-md-6 mb-4">
-            <a href="{{ url('/admin/daftarulang?status=acc') }}" data-status="acc" class="text-decoration-none filter-link">
+                <a href="{{ url('/admin/daftarulang?status=acc') }}" data-status="acc" class="text-decoration-none filter-link">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -185,7 +185,7 @@
 
             <!-- Pending Requests Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
-            <a href="{{ url('/admin/daftarulang?status=menunggu') }}" data-status="acc" class="text-decoration-none filter-link">
+                <a href="{{ url('/admin/daftarulang?status=menunggu') }}" data-status="acc" class="text-decoration-none filter-link">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -208,8 +208,9 @@
 
         <h5 class="mb-3 mt-2 h5 text-gray-800  text-xs-center text-black">Widget Jadwal PPDB</h5>
         <div class="row">
+            @if($informasiPendaftaran)
             <div class="col-xl-3 col-md-6 mb-4">
-                <a href="{{ url('/admin/informasi/1') }}" class="text-decoration-none">
+                <a href="{{ route('informasi.edit', $informasiPendaftaran->id) }}" class="text-decoration-none">
                     <div class="card border-left-success shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -227,16 +228,18 @@
                     </div>
                 </a>
             </div>
+            @endif
 
+            @if($informasiPengumuman)
             <div class="col-xl-3 col-md-6 mb-4">
-                <a href="{{ url('/admin/informasi/2') }}" class="text-decoration-none">
+                <a href="{{ route('informasi.edit', $informasiPengumuman->id) }}" class="text-decoration-none">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                         Tanggal Pengumuman Lolos</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiPengumuman->tanggal_pengumuman->format('d M Y') }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiPengumuman->tanggal_mulai->format('d M Y')}} </div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
@@ -247,15 +250,17 @@
                     </div>
                 </a>
             </div>
+            @endif
+            @if($informasiDaftarUlang)
             <div class="col-xl-3 col-md-6 mb-4">
-                <a href="{{url('/admin/informasi/3') }}" class="text-decoration-none">
+                <a href="{{ route('informasi.edit', $informasiDaftarUlang->id) }}" class="text-decoration-none">
                     <div class="card border-left-dark shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
                                         Tanggal Daftar Ulang Berkas</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiDaftarUlang->tanggal_daftar_ulang->format('d M Y') }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiDaftarUlang->tanggal_mulai->format('d M Y') }}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-file-alt fa-2x text-gray-300"></i>
@@ -266,40 +271,30 @@
                     </div>
                 </a>
             </div>
+            @endif
+            @if($informasiSiswaMasuk)
             <div class="col-xl-3 col-md-6 mb-4">
-                <a href="{{ url('/admin/informasi/4') }}" class="text-decoration-none">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                <a href="{{ route('informasi.edit', $informasiSiswaMasuk->id) }}" class="text-decoration-none">
+                    <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
                                         Tanggal Siswa Masuk</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiTanggalMasuk->tanggal->format('d M Y') }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $informasiSiswaMasuk->tanggal_mulai->format('d M Y') }}</div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-file-alt fa-2x text-gray-300"></i>
-
+                                    <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
+            @endif
         </div>
-
-
 
         <!-- Content Row -->
 
     </div>
-    <!-- container-fluid -->
-    <!--
-    @push('script')
-    <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
-    <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
-    @endpush -->
-
-
-
 </x-app-layout>

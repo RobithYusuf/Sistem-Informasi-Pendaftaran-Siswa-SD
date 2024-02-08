@@ -9,9 +9,10 @@ class AuthController extends Controller
 {
     public function login()
     {
-        return view('auth.index');
+        return view('auth.login');
     }
 
+    
     public function postLogin(Request $request)
     {
         $request->validate(
@@ -26,19 +27,8 @@ class AuthController extends Controller
         );
         // Mencoba untuk otentikasi pengguna
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
-            // jika berhasil, cek role pengguna dan redirect ke dashboard yang sesuai
-            $userRole = Auth::user()->role->role; // asumsi Anda memiliki relasi 'role' di model User
-
-            switch ($userRole) {
-                case 'admin':
-                    return redirect('/admin/dashboard');
-                case 'arsiparis':
-                    return redirect('/arsiparis/dashboard');
-                case 'pimpinan':
-                    return redirect('/pimpinan/dashboard');
-                default:
-                    return redirect('/home'); // atau halaman default lainnya
-            }
+            // jika berhasil, redirect ke dashboard atau halaman yang diinginkan
+            return redirect()->intended('/admin/dashboard');
         }
 
         // Jika otentikasi gagal, kembali ke halaman login dengan pesan kesalahan

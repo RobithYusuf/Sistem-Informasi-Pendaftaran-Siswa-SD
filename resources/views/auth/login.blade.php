@@ -155,7 +155,7 @@
             .content-4-1 .right {
                 width: 66.666667%;
             }
-            
+
         }
 
         @media (min-width: 992px) {
@@ -200,13 +200,13 @@
     <section class="h-100 w-100" style="box-sizing: border-box; background-color: #f5f5f5">
         <div class="content-4-1 d-flex flex-column align-items-center h-100 flex-lg-row" style="font-family: 'Poppins', sans-serif; padding-top: 0px">
             <div class="position-relative d-none d-lg-block h-100 width-left bg-primary">
-                <img class="position-absolute img-fluid centered rounded-img" src="sdn1kretek.jpg" alt="" style="width: 80%;" />
+                <img class="position-absolute img-fluid centered rounded-img" src="{{asset('assets/img/sdn1kretek.jpg')}}" alt="" style="width: 80%;" />
             </div>
 
             <div id="page" class="d-flex mx-0 align-items-left justify-content-left width-right mx-lg-0">
                 <div class="right mx-lg-0 mx-auto">
                     <div class="align-items-center justify-content-center mb-3 pb-3 d-lg-none d-flex">
-                        <img class="img-fluid rounded-img" src="sdn1kretek.jpg" alt="" style="width: 100%;" />
+                        <img class="img-fluid rounded-img" src="{{asset('assets/img/sdn1kretek.jpg')}}" alt="" style="width: 100%;" />
                     </div>
                     <h3 class="title-text text-center mt-xs-3">Login Admin</h3>
                     <p class="caption-text text-center">

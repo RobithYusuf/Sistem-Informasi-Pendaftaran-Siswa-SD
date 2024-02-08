@@ -1,42 +1,14 @@
-<x-app-layout title='Pendaftaran'>
+<x-app-layout title='Kelola Jadwal'>
     <style>
-        th.no-wrap {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px;
+        .button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        td.no-wrap {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px;
-        }
-
-        .status-label:hover {
-            opacity: 0.8;
-        }
-
-        .bg-warning-light {
-            background-color: #ffeeba;
-            color: #856404;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
-        }
-
-        .bg-success-light {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
-        }
-
-        .bg-danger-light {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.25rem;
+        .btn-container {
+            display: flex;
+            gap: 5px;
         }
     </style>
 
@@ -53,7 +25,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Tabel Pendaftaran</h6>
             </div>
             <div class="card-body">
-                <!-- <a href="#" class="btn btn-primary mb-3">Tambah Data</a> -->
+                <a href="{{ route ('informasi.create') }}" class="btn btn-primary mb-3">Tambah Data</a>
                 @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
@@ -65,19 +37,17 @@
                     {{ session('success') }}
                 </div>
                 @endif
+                <div id="notification" class="alert" style="display:none"></div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Informasi</th>
-                                <th>Deskripsi Jadwal</th>
-                                <th>Tanggal Mulai</th>
-                                <th>Tanggal Selesai</th>
-                                <th>Tanggal Pengumuman</th>
-                                <th>Tanggal Daftar Ulang</th>
-                                <th>Tanggal </th>
-
+                                <th>Kegiatan</th>
+                                <th>Deskripsi</th>
+                                <th>Jenis Informasi</th>
+                                <th class="text-center">Tanggal Mulai</th>
+                                <th class="text-center">Tanggal Selesai</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -85,26 +55,54 @@
                             @foreach($informasi as $data)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $data->judul_informasi ?? '-' }}</td>
-                                <td>{{ $data->detail ?? '-' }}</td>
+                                <td>{{ $data->kegiatan ?? '-' }}</td>
+                                <td>{{ $data->deskripsi ?? '-' }}</td>
+                                <td>{{ UCfirst($data->jenis ?? '-') }}</td>
                                 <td class="no-wrap text-center">{{ $data->tanggal_mulai ? \Carbon\Carbon::parse($data->tanggal_mulai)->format('d M Y') : '-' }}</td>
                                 <td class="no-wrap text-center">{{ $data->tanggal_selesai ? \Carbon\Carbon::parse($data->tanggal_selesai)->format('d M Y') : '-' }}</td>
-                                <td class="no-wrap text-center">{{ $data->tanggal_pengumuman ? \Carbon\Carbon::parse($data->tanggal_pengumuman)->format('d M Y') : '-' }}</td>
-                                <td class="no-wrap text-center">{{ $data->tanggal_daftar_ulang ? \Carbon\Carbon::parse($data->tanggal_daftar_ulang)->format('d M Y') : '-' }}</td>
-                                <td class="no-wrap text-center">{{ $data->tanggal ? \Carbon\Carbon::parse($data->tanggal)->format('d M Y') : '-' }}</td>
                                 <td>
-                                    <a href="{{ route('informasi.edit', $data->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <div class="button-container">
+                                        <div class="btn-container">
+                                            <a href="{{ route('informasi.edit', $data->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="#" class="btn btn-sm btn-danger deleteLink" data-nama="{{ $data->kegiatan }}" data-url="{{ route('informasi.hapus', $data->id) }}" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
-
-
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus <span id="deleteItemName"></span>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <form method="POST" id="deleteForm">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     @push('script')
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -175,6 +173,60 @@
                     }
                 });
             });
+        });
+
+        //hapus
+        $(document).ready(function() {
+            var deleteUrl;
+
+            $(".deleteLink").on("click", function(e) {
+                e.preventDefault(); // Prevent the link from navigating
+
+                deleteUrl = $(this).data('url');
+                var deleteItemName = $(this).data('nama');
+
+                $("#deleteItemName").text('"' + deleteItemName + '"');
+            });
+
+            $("#deleteForm").on("submit", function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: deleteUrl,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        localStorage.setItem("notification", response.success);
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 600); // Delay reload untuk 1 detik
+                    },
+
+
+                    error: function() {
+                        alert("Terjadi kesalahan. Silakan coba lagi.");
+                    }
+                });
+
+                $("#deleteModal").modal("hide");
+            });
+
+            var notification = localStorage.getItem("notification");
+            if (notification) {
+                $('#notification').text(notification);
+                $('#notification').addClass('alert-success');
+                $('#notification').show();
+
+                // Menghilangkan notifikasi setelah 5 detik
+                setTimeout(function() {
+                    $('#notification').hide();
+                }, 5000);
+
+                localStorage.removeItem("notification");
+            }
         });
     </script>
 

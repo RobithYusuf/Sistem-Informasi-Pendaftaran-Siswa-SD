@@ -32,76 +32,34 @@ class BerkasController extends Controller
         return view('frontend.daftarulang.index');
     }
 
-
-    // public function validasidata(Request $request)
-    // {
-    //     $nik = $request->input('nik');
-    //     $tanggal_lahir = \DateTime::createFromFormat('dmY', $request->input('tanggal_lahir'));
-    //     $formatted_tanggal_lahir = $tanggal_lahir->format('Y-m-d');
-    //     $pendaftaran = Pendaftaran::where('nik', $nik)->where('tanggal_lahir', $formatted_tanggal_lahir)->first();
-
-    //     if ($pendaftaran) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'pendaftaran_id' => $pendaftaran->id,
-    //             'nik' => $pendaftaran->nik,
-    //             'nama' => $pendaftaran->nama
-    //         ]);
-    //     } else {
-    //         return response()->json(['success' => false, 'error' => 'Data tidak ditemukan']);
-    //     }
-    // }
-    //     public function validasidata(Request $request)
-    // {
-    //     $nik = $request->input('nik');
-    //     $tanggal_lahir = \DateTime::createFromFormat('dmY', $request->input('tanggal_lahir'));
-    //     $formatted_tanggal_lahir = $tanggal_lahir->format('Y-m-d');
-
-    //     $informasiDaftarUlang = Informasi::find(3); // Ambil baris dengan ID 3 untuk tanggal daftar ulang
-    //     $informasiTanggalMasuk = Informasi::find(4); // Ambil baris dengan ID 4 untuk tanggal masuk
-
-    //     $tanggal_daftar_ulang = $informasiDaftarUlang ? Carbon::parse($informasiDaftarUlang->tanggal_daftar_ulang) : null;
-    //     $tanggal_masuk = $informasiTanggalMasuk ? Carbon::parse($informasiTanggalMasuk->tanggal) : null;
-
-    //     // Cek apakah tanggal sekarang berada di antara tanggal daftar ulang dan tanggal masuk
-    //     if (!$tanggal_daftar_ulang || !$tanggal_masuk || !Carbon::now()->between($tanggal_daftar_ulang->startOfDay(), $tanggal_masuk->endOfDay())) {
-    //         return response()->json(['success' => false, 'error' => 'Tidak dalam periode daftar ulang']);
-    //     }
-
-    //         $pendaftaran = Pendaftaran::where('nik', $nik)->where('tanggal_lahir', $formatted_tanggal_lahir)->first();
-
-    //         if ($pendaftaran) {
-    //             return response()->json([
-    //                 'success' => true,
-    //                 'pendaftaran_id' => $pendaftaran->id,
-    //                 'nik' => $pendaftaran->nik,
-    //                 'nama' => $pendaftaran->nama
-    //             ]);
-    //         } else {
-    //             return response()->json(['success' => false, 'error' => 'Data tidak ditemukan']);
-    //         }
-    //     }
-
-
     public function validasidata(Request $request)
     {
         $nik = $request->input('nik');
         $tanggal_lahir = \DateTime::createFromFormat('dmY', $request->input('tanggal_lahir'));
         $formatted_tanggal_lahir = $tanggal_lahir->format('Y-m-d');
 
+        // Mencari data pendaftaran berdasarkan NIK dan tanggal lahir
         $pendaftaran = Pendaftaran::where('nik', $nik)->where('tanggal_lahir', $formatted_tanggal_lahir)->first();
 
         if (!$pendaftaran) {
             return response()->json(['success' => false, 'error' => 'Data tidak ditemukan']);
         }
 
-        $informasiDaftarUlang = Informasi::find(3); // Ambil baris dengan ID 3
-        $informasiTanggalMasuk = Informasi::find(4);
-        $tanggal_daftar_ulang = $informasiDaftarUlang ? Carbon::parse($informasiDaftarUlang->tanggal_daftar_ulang) : null;
-        $tanggal_masuk = $informasiTanggalMasuk ? Carbon::parse($informasiTanggalMasuk->tanggal) : null;
+        // Mengambil informasi daftar ulang dan tanggal masuk siswa
+        $informasiDaftarUlang = Informasi::where('jenis', 'daftarulang')->first();
+        $informasiSiswaMasuk = Informasi::where('jenis', 'siswamasuk')->first();
+        $sekarang = Carbon::now();
 
-        if (!$tanggal_daftar_ulang || !$tanggal_masuk || !Carbon::now()->between($tanggal_daftar_ulang->startOfDay(), $tanggal_masuk->endOfDay())) {
-            return response()->json(['success' => false, 'error' => 'Tidak dalam periode daftar ulang']);
+        if (!$informasiDaftarUlang || !$informasiSiswaMasuk) {
+            return response()->json(['success' => false, 'error' => 'Informasi kegiatan tidak ditemukan']);
+        }
+
+        // Memeriksa apakah saat ini berada dalam rentang tanggal daftar ulang dan siswa masuk
+        if (
+            !$sekarang->between($informasiDaftarUlang->tanggal_mulai, $informasiDaftarUlang->tanggal_selesai) &&
+            !$sekarang->between($informasiSiswaMasuk->tanggal_mulai, $informasiSiswaMasuk->tanggal_selesai)
+        ) {
+            return response()->json(['success' => false, 'error' => 'Tidak dalam periode daftar ulang atau siswa masuk']);
         }
 
         if ($pendaftaran->status_pendaftaran === 'menunggu') {
@@ -110,6 +68,7 @@ class BerkasController extends Controller
             return response()->json(['success' => false, 'error' => 'Maaf, Anda belum lulus pendaftaran']);
         }
 
+        // Jika semua validasi terpenuhi, kembalikan data pendaftaran
         return response()->json([
             'success' => true,
             'pendaftaran_id' => $pendaftaran->id,
@@ -117,6 +76,7 @@ class BerkasController extends Controller
             'nama' => $pendaftaran->nama
         ]);
     }
+
 
 
     public function store(Request $request)

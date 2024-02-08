@@ -13,8 +13,8 @@ class Pengumuman extends Model
     protected $guarded = [];
     protected $table = 'pengumuman';
 
-    public function pendaftaran()
-    {
-        return $this->belongsTo(Pendaftaran::class);
-    }
+    // public function pendaftaran()
+    // {
+    //     return $this->belongsTo(Pendaftaran::class);
+    // }
 }

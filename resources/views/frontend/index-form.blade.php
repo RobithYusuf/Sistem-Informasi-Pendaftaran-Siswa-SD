@@ -9,6 +9,7 @@
     <meta content="" name="keywords">
     <base href="http://ppdb-online.test/">
     @include('frontend.template.linkstyle')
+    
 </head>
 
 <style>
@@ -102,10 +103,6 @@
                 <h2>@yield('judul_halaman')</h2>
             </div>
         </section>
-
-
-
-
         <!-- End Breadcrumbs -->
 
         @yield('content')

@@ -12,13 +12,11 @@ class Informasi extends Model
     protected $guarded = [];
     protected $table = 'informasi';
 
-    protected $dates = ['tanggal', 'tanggal_mulai', 'tanggal_selesai', 'tanggal_pengumuman', 'tanggal_daftar_ulang'];
+    protected $fillable = ['kegiatan', 'deskripsi', 'tanggal_mulai', 'tanggal_selesai','jenis'];
+
 
     protected $casts = [
-        'tanggal'=> 'datetime',
         'tanggal_mulai' => 'datetime',
         'tanggal_selesai' => 'datetime',
-        'tanggal_pengumuman' => 'datetime',
-        'tanggal_daftar_ulang' => 'datetime',
     ];
 }

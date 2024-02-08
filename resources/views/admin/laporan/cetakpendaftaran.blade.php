@@ -26,7 +26,7 @@
             text-overflow: ellipsis;
             border: 1px solid #ededed;
             padding: 5px;
-            font-size: 10px;
+            font-size: 8px;
             background-color: #ddd;
         }
 
@@ -40,7 +40,7 @@
             /* Ubah ini */
             border: 1px solid #ededed;
             padding: 5px;
-            font-size: 10px;
+            font-size: 8px;
             margin-bottom: 2rem;
         }
 
@@ -110,11 +110,49 @@
             font-weight: bold;
         }
 
+        footer {
+            font-size: 10px;
+        }
+
         .footer-style {
             margin-top: 4rem !important;
         }
+
         .footer-style1 {
             margin-top: 1rem !important;
+        }
+
+        .badge-custom {
+      
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .bg-warning-custom {
+            background-color: #ffc107;
+            text-align: center;
+            color: #000;
+            opacity: 0.8;
+            /* Atur level transparansi di sini, contoh 0.8 */
+        }
+
+        .bg-success-custom {
+            background-color: #28a745;
+            text-align: center;
+            color: #fff;
+            opacity: 0.8;
+            /* Atur level transparansi di sini, contoh 0.8 */
+        }
+
+        .bg-danger-custom {
+            background-color: #dc3545;
+            text-align: center;
+            color: #fff;
+            opacity: 0.8;
+            /* Atur level transparansi di sini, contoh 0.8 */
         }
     </style>
 </head>
@@ -124,7 +162,7 @@
         <table style="width: 100%; border: none;">
             <tr>
                 <td style="width: 15%; text-align: left;">
-                    <img src="logo.png" alt="Logo Sekolah" style="width:100px; height:100px;">
+                    <img src="{{ asset('assets/img/logo.png') }}" class="logo.png" alt="Logo Sekolah" style="width:100px; height:100px;">
                 </td>
                 <td style="width: 70%; text-align: center; margin-top:5px">
                     <div class="title">
@@ -134,7 +172,7 @@
                     </div>
                 </td>
                 <td style="width: 15%; text-align: right;">
-                    <img src="bantul.png" alt="LogoBantul" style="width:100px; height:100px;">
+                    <img src="{{ asset('assets/img/bantul.png') }}" alt="LogoBantul" style="width:100px; height:100px;">
                 </td>
             </tr>
         </table>
@@ -171,7 +209,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $pendaftaran)
+            @forelse ($data as $pendaftaran)
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $pendaftaran->nik }}</td>
@@ -184,9 +222,23 @@
                 <td>{{ $pendaftaran->jumlah_saudara }}</td>
                 <td>{{ $pendaftaran->anak_ke }}</td>
                 <td>{{ $pendaftaran->created_at->format('Y-m-d') }}</td>
-                <td>{{ strtoupper($pendaftaran->status_pendaftaran) }}</td>
+
+                <td>
+                    @if ($pendaftaran->status_pendaftaran == 'menunggu')
+                    <span class="badge badge-custom bg-warning-custom">{{ strtoupper($pendaftaran->status_pendaftaran) }}</span>
+                    @elseif ($pendaftaran->status_pendaftaran == 'diterima')
+                    <span class="badge badge-custom bg-success-custom">{{ strtoupper($pendaftaran->status_pendaftaran) }}</span>
+                    @elseif ($pendaftaran->status_pendaftaran == 'ditolak')
+                    <span class="badge badge-custom bg-danger-custom">{{ strtoupper($pendaftaran->status_pendaftaran) }}</span>
+                    @endif
+                </td>
+
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="12" style="text-align: center;"> Tidak ada data </td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
     <footer>

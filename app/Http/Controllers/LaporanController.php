@@ -21,7 +21,14 @@ class LaporanController extends Controller
         $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+        ], [
+            'start_date.required' => 'Kolom tanggal mulai harus diisi.',
+            'start_date.date' => 'Kolom tanggal mulai harus berupa tanggal.',
+            'end_date.required' => 'Kolom tanggal selesai harus diisi.',
+            'end_date.date' => 'Kolom tanggal selesai harus berupa tanggal.',
+            'end_date.after_or_equal' => 'Kolom tanggal selesai harus setelah atau sama dengan tanggal mulai.',
         ]);
+
 
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
@@ -36,6 +43,6 @@ class LaporanController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf = $pdf->loadView('admin.laporan.cetakpendaftaran', compact('data', 'startDate', 'endDate', 'totalRows'));
 
-        return $pdf->download('laporan Pendaftaran.pdf');
+        return $pdf->stream('laporan Pendaftaran.pdf');
     }
 }

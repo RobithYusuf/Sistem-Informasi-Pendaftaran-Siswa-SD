@@ -124,9 +124,17 @@
                 </div>
             </div>
 
-
-
             <div class="card-body">
+
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <!-- <a href="#" class="btn btn-primary mb-3">Tambah Data</a> -->
                 <div id="notification" class="alert" style="display:none"></div>
                 <div class="table-responsive">
@@ -149,7 +157,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($pendaftaran as $data)
+                            @forelse($pendaftaran as $data)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nik }}</td>
@@ -172,7 +180,11 @@
                                     @endif
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="12" class="text-center">Tidak ada data</td>
+                            </tr>
+                            @endforelse
 
                         </tbody>
                     </table>
